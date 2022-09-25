@@ -101,7 +101,11 @@ This is particularly useful if you are testing changes in the toolchain (ie. gcc
 ```sh
 mkdir $HOME/psptmp
 docker buildx create --use
-docker buildx build --platform linux,arm64 -o type=local,dest=$HOME/psptmp  -f cross/Dockerfile.cross-ubuntu .
+docker buildx build --platform linux,arm64 -o type=tar,dest=$HOME/psptmp/psptmp.tar  -f cross/Dockerfile.cross-ubuntu .
+cd $HOME/psptmp
+tar xf psptmp.tar linux_arm64/usr/local/pspdev
 ```
 
-After these commands finish, you should have the typical /usr/local/pspdev cross-compiled for aarch64 on ubuntu 22.04 at `$HOME/psptmp/linux_arm64/usr/local/pspdev`. Copy this out to your aarch64 ubuntu machine (probably tar it first) and delete the rest of the junk in $HOME/psptmp
+After these commands finish, you should have the typical /usr/local/pspdev folder cross-compiled for aarch64 on ubuntu 22.04 at `$HOME/psptmp/linux_arm64/usr/local/pspdev`. Copy this out to your aarch64 ubuntu machine (maybe re-tar it first) and delete the rest of the junk in $HOME/psptmp
+
+I could not find a way to only copy what we care about from a docker buildx build (aside from breaking into my /var/lib/docker/volumes) so that is why we have to go through these shenanigans of making a tar, taking what we want from it, and deleting it. The local output mode takes forever, so that is another reason we use the tar.
