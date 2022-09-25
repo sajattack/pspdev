@@ -89,3 +89,19 @@ LOCAL_PACKAGE_BUILD=1 ./build-all.sh
 This is particularly useful if you are testing changes in the toolchain (ie. gcc or binutils) and want to test your changes end to end. It can also be useful if you want a hermetic build and don't want to use any of the provided binaries.
 
 ## Thanks
+
+
+## Foreign architecture builds with docker buildx
+
+### aarch64 Ubuntu example
+
+- Install qemu-user-static and binfmt-misc
+- Install this https://github.com/docker/buildx
+
+```sh
+mkdir $HOME/psptmp
+docker buildx create --use
+docker buildx build --platform linux,arm64 -o type=local,dest=$HOME/psptmp  -f cross/Dockerfile.cross-ubuntu .
+```
+
+After these commands finish, you should have the typical /usr/local/pspdev cross-compiled for aarch64 on ubuntu 22.04 at `$HOME/psptmp/linux_arm64/usr/local/pspdev`. Copy this out to your aarch64 ubuntu machine (probably tar it first) and delete the rest of the junk in $HOME/psptmp
