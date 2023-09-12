@@ -1,0 +1,29 @@
+#FROM alpine:3.16.6
+ARG DOCKER_CROSS_BASE
+FROM $DOCKER_CROSS_BASE
+
+RUN apk add texinfo build-base git gzip bash patch wget zlib-dev ucl-dev \
+readline-dev libusb-compat-dev autoconf automake bison flex python3 py3-pip cmake \
+pkgconfig libarchive-dev openssl-dev gpgme-dev libtool curl unzip wget xz \
+fakeroot gmp-dev mpfr-dev mpc1-dev
+
+ENV PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+ENV PATH="/usr/local/opt/libtool/libexec/gnubin:$PATH" 
+ENV PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig:/usr/local/opt/openssl@3/lib/pkgconfig" 
+ENV PSPDEV=/usr/local/pspdev/
+ENV PATH=$PATH:$PSPDEV/bin
+COPY . /pspdev
+WORKDIR /pspdev
+RUN ./build-all.sh
+RUN ./build-extra.sh
+
+# For releasing an alpine docker image
+#FROM alpine:3.16.6
+#COPY --from=0 /usr/local/pspdev /usr/local/pspdev
+#RUN apk add --no-cache gmp mpc1 mpfr4 make bash pkgconf cmake
+#ENV PSPDEV=/usr/local/pspdev/
+#ENV PATH=$PATH:$PSPDEV/bin
+
+# For releasing a tar
+FROM scratch
+COPY --from=0 /usr/local/pspdev /pspdev
