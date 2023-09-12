@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get -y install autoconf automake bison bzip2 cmake doxygen flex g++ gcc \
@@ -17,4 +17,7 @@ ENV PATH=$PATH:$PSPDEV/bin
 COPY . /pspdev
 WORKDIR /pspdev
 RUN ./build-all.sh
+RUN ./build-extra.sh
 
+FROM scratch
+COPY --from=0 /usr/local/pspdev /pspdev
