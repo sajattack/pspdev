@@ -29,7 +29,7 @@ jobs:
             human_platform: arm64
             base_image: "alpine:latest"
           - docker_platform: linux/riscv64
-            human_platfrom: riscv64gc
+            human_platform: riscv64gc
             base_image: "riscv64/alpine:edge"
 
     runs-on: self-hosted
