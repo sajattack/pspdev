@@ -21,13 +21,13 @@ jobs:
         include:
           - docker_platform: linux/arm/v6
             human_platform: armv6
-            base_image: "alpine:latest"
+            base_image: "alpine:3.16"
           - docker_platform: linux/arm/v7
             human_platform: armv7
-            base_image: "alpine:latest"
+            base_image: "alpine:3.16"
           - docker_platform: linux/arm64
             human_platform: arm64
-            base_image: "alpine:latest"
+            base_image: "alpine:3.16"
           - docker_platform: linux/riscv64
             human_platform: riscv64gc
             base_image: "riscv64/alpine:edge"
